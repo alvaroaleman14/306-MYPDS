@@ -1,0 +1,5 @@
+Casos de prueba para la clase Fibonacci:
+1. Probar que si se introduce un numero negativo sale error
+2. Probar que al introducir el 0 devuelve 0
+3. Probar que al introducir el 1 devuelve 1
+4. Probar que al introducir 7 devuelve 13
