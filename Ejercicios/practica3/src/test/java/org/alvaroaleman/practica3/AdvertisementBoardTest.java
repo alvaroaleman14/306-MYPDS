@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class AdvertisementBoardTest {
 
@@ -39,22 +41,59 @@ class AdvertisementBoardTest {
   @Test
   public void WhenAnAdvertiserHasNoFoundsTheAdvertisementIsNotPublished() {
 
-    AdvertisementBoard board = Mockito.mock(AdvertisementBoard.class);
+    AdvertisementBoard board = new AdvertisementBoard();
     AdvertiserDatabase adb = Mockito.mock(AdvertiserDatabase.class);
     PaymentDatabase pdb = Mockito.mock(PaymentDatabase.class);
+    Advertisement ad = new Advertisement("titulo","texto","Pepe Gotera y Otilio");
 
-    Advertisement anuncio = new Advertisement("titulo", "texto", "Advertiser");
+    Mockito.when(adb.findAdviser("Pepe Gotera y Otilio" )).thenReturn(true);
+    Mockito.when(pdb.advertiserHasFunds("Pepe Gotera y Otilio" )).thenReturn(false);
 
-    Mockito.when(pdb.advertiserHasFunds("Advertiser")).thenReturn(false);
+    int actualValue = board.numberOfPublishedAdvertisements();
+    board.publish(ad ,adb ,pdb );
+    int expectedValue = 1;
 
-    Mockito.verify(board).publish(anuncio,adb,pdb);
+    assertEquals(expectedValue, actualValue);
+
+
   }
 
   @Test
-  public void AnAdvertisementIsPublishedIfTheAdvertiserIsRegisteredAndHasFunds() {}
+  public void AnAdvertisementIsPublishedIfTheAdvertiserIsRegisteredAndHasFunds() {
+
+    AdvertisementBoard board = new AdvertisementBoard();
+    AdvertiserDatabase adb = Mockito.mock(AdvertiserDatabase.class);
+    PaymentDatabase pdb = Mockito.mock(PaymentDatabase.class);
+    Advertisement ad = new Advertisement("titulo","texto","Robin Robot");
+
+    Mockito.when(adb.findAdviser("Robin Robot")).thenReturn(true);
+    Mockito.when(pdb.advertiserHasFunds("Robin Robot")).thenReturn(true);
+
+    int actualValue = board.numberOfPublishedAdvertisements();
+    board.publish(ad ,adb ,pdb );
+    int expectedValue = 1;
+
+    assertEquals(expectedValue, actualValue);
+  }
 
   @Test
-  public void WhenTheOwnerMakesTwoPublicationsAndTheFirstOneIsDeletedItIsNotInTheBoard() {}
+  public void WhenTheOwnerMakesTwoPublicationsAndTheFirstOneIsDeletedItIsNotInTheBoard() {
+    AdvertisementBoard board = new AdvertisementBoard();
+    AdvertiserDatabase adb = Mockito.mock(AdvertiserDatabase.class);
+    PaymentDatabase pdb = Mockito.mock(PaymentDatabase.class);
+    Advertisement ad = new Advertisement("titulo","texto","Advertiser");
+    Advertisement ad2 = new Advertisement("titulo1","texto1","Advertiser");
+
+    board.publish(ad ,adb ,pdb );
+    board.publish(ad2 ,adb ,pdb );
+    board.deleteAdvertisement("titulo1", "Advertiser");
+
+    Advertisement actualValue = board.findByTitle("titulo1");
+    Advertisement expectedValue = null;
+
+    assertEquals(expectedValue, actualValue);
+
+  }
 
   @Test
   public void AnExistingAdvertisementIsNotPublished() {}
