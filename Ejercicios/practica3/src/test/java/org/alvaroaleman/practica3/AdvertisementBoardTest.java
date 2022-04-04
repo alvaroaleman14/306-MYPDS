@@ -1,9 +1,13 @@
 package org.alvaroaleman.practica3;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
+
 class AdvertisementBoardTest {
+
+
 
   @Test
   public void ABoardHasAnAdvertisementWhenItIsCreated() {
@@ -33,7 +37,18 @@ class AdvertisementBoardTest {
   }
 
   @Test
-  public void WhenAnAdvertiserHasNoFoundsTheAdvertisementIsNotPublished() {}
+  public void WhenAnAdvertiserHasNoFoundsTheAdvertisementIsNotPublished() {
+
+    AdvertisementBoard board = Mockito.mock(AdvertisementBoard.class);
+    AdvertiserDatabase adb = Mockito.mock(AdvertiserDatabase.class);
+    PaymentDatabase pdb = Mockito.mock(PaymentDatabase.class);
+
+    Advertisement anuncio = new Advertisement("titulo", "texto", "Advertiser");
+
+    Mockito.when(pdb.advertiserHasFunds("Advertiser")).thenReturn(false);
+
+    Mockito.verify(board).publish(anuncio,adb,pdb);
+  }
 
   @Test
   public void AnAdvertisementIsPublishedIfTheAdvertiserIsRegisteredAndHasFunds() {}
