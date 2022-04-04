@@ -1,13 +1,15 @@
 package org.alvaroaleman.factorial;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileStore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test cases:
@@ -19,7 +21,7 @@ import org.junit.jupiter.api.Test;
  * factorial negative number -> raises an exception
  */
 
-class FactorialTest {
+public class FactorialTest {
     private Factorial factorial ;
 
     @BeforeEach
@@ -75,5 +77,12 @@ class FactorialTest {
     @Test
     public void shouldComputeOfANegativeNumberRaiseAnException() {
         assertThrows(RuntimeException.class, () -> factorial.compute(-1)) ;
+    }
+
+    @ParameterizedTest
+    @ValueSource (ints = {0,1,2,3,6})
+    public void pruebaParameterizedTest(int numero){
+        int [] resultados = {1,1,2,6,720};
+        assertFalse(Arrays.asList(resultados).contains(factorial.compute(numero)));
     }
 }
